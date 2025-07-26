@@ -1,5 +1,101 @@
 # **GuardChain Frontend - AI-Powered Fraud Detection System**
+# JagaDana Backend & Database
 
+JagaDana is a robust backend and database solution for real-time fraud detection, alerting, and analytics. This backend powers the JagaDana platform, providing secure APIs, real-time updates, and a flexible database schema for financial monitoring and investigation.
+
+## Features
+- RESTful API for fraud alerts, transactions, users, investigations, and analytics
+- Real-time alert and analytics updates via WebSocket
+- Prisma ORM with SQLite (default) for rapid prototyping
+- Seed script for demo data and easy onboarding
+- Modular, scalable backend structure
+
+## Getting Started
+
+### 1. Install dependencies
+```bash
+npm install
+```
+
+### 2. Run database migrations and seed demo data
+```bash
+npx prisma migrate reset --force --skip-seed
+npx prisma db seed
+```
+
+### 3. Start the backend server
+```bash
+npm run dev
+```
+
+The backend will be available at [http://localhost:3000](http://localhost:3000).
+
+---
+
+## Project Structure
+
+- `prisma/` — Prisma schema, migrations, and seed data
+  - `schema.prisma` — Database schema definition
+  - `dev.db` — SQLite database file
+  - `seed.ts` — Demo data seeder
+- `src/app/api/` — API route handlers (REST endpoints)
+- `src/lib/` — Backend logic, real-time server, and utility functions
+- `src/types/` — TypeScript types for models and API
+
+---
+
+## Database Schema Overview
+
+JagaDana uses a relational schema designed for extensibility and analytics. Key models include:
+
+### User
+- `id`, `email`, `username`, `password`, `role`, `isActive`, `createdAt`, `updatedAt`
+- Relations: investigations, reports, sessions, alerts
+
+### Transaction
+- `id`, `transactionId`, `amount`, `currency`, `fromAccount`, `toAccount`, `description`, `timestamp`, `location`, `status`, `riskScore`, `isBlacklisted`, `isFlagged`, `metadata`, `createdAt`, `updatedAt`
+- Relations: alerts, investigations, analytics
+
+### Alert
+- `id`, `title`, `description`, `severity` (LOW, MEDIUM, HIGH, CRITICAL), `status` (PENDING, INVESTIGATING, RESOLVED, FALSE_POSITIVE), `riskScore`, `category`, `transactionId`, `assignedToId`, `metadata`, `detected`, `responseTime`, `createdAt`, `updatedAt`
+- Linked to transactions and users
+
+### Investigation
+- `id`, `title`, `description`, `status`, `priority`, `alertId`, `investigatorId`, `transactionId`, `createdAt`, `updatedAt`
+
+### Analytics
+- `id`, `metric`, `value`, `timestamp`, `category`, `subcategory`
+
+### BlacklistEntry
+- `id`, `type` (ACCOUNT, EMAIL, IP_ADDRESS), `value`, `reason`, `addedBy`, `createdAt`
+
+---
+
+## API Endpoints
+
+- `/api/alerts` — List, filter, and manage fraud alerts
+- `/api/transactions` — Transaction data and search
+- `/api/analytics` — Real-time and historical analytics
+- `/api/investigations` — Case management
+- `/api/auth` — Authentication endpoints
+- `/api/websocket` — Real-time updates (WebSocket)
+
+---
+
+## Development Notes
+- The database file (`prisma/dev.db`) should not be in use by another process when running migrations.
+- For real-time features, ensure the WebSocket server is running.
+- You can customize the seed data in `prisma/seed.ts`.
+- The backend is designed for easy migration to PostgreSQL or other relational databases.
+
+---
+
+## License
+MIT
+
+---
+
+JagaDana Backend — GuardChain Team
 ## **📋 Project Overview**
 
 **GuardChain** is a comprehensive AI-powered fraud detection platform built for the BI-OJK Hackathon 2025. This Next.js 15 application provides real-time fraud monitoring, investigation workflows, and analytics dashboards for financial institutions, featuring advanced ML-powered risk scoring and comprehensive case management tools.
